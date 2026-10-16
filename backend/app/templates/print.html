@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>{{ data.document.title }}</title>
+<style>
+@font-face {font-family:PrintSans;src:url(data:font/ttf;base64,{{ regular }}) format('truetype');font-weight:400}
+@font-face {font-family:PrintSans;src:url(data:font/ttf;base64,{{ bold }}) format('truetype');font-weight:700}
+@page {
+  size: A4;
+  margin: 0;
+}
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  color: #0f172a;
+  background: #ffffff;
+  font-family: PrintSans, sans-serif;
+  font-size: 11.5pt;
+  line-height: 1.6;
+}
+.sheet {
+  width: 210mm;
+  height: 297mm;
+  padding: 14mm 16mm;
+  position: relative;
+  break-after: page;
+  background: #ffffff;
+}
+.sheet:last-child {
+  break-after: auto;
+}
+.content {
+  height: 258mm;
+}
+.footer {
+  position: absolute;
+  left: 16mm;
+  right: 16mm;
+  bottom: 8mm;
+  font-size: 8.5pt;
+  color: #475569;
+  border-top: 0.8pt solid #0f172a;
+  padding-top: 2mm;
+  display: flex;
+  justify-content: space-between;
+}
+h1 {
+  font-size: 18pt;
+  line-height: 1.25;
+  margin: 0 0 2.5mm;
+  color: #000000;
+}
+h2 {
+  font-size: 13.5pt;
+  line-height: 1.35;
+  margin: 0 0 2.5mm;
+  color: #000000;
+}
+h3 {
+  font-size: 11pt;
+  margin: 0 0 1.5mm;
+  color: #000000;
+}
+p {
+  margin: 0 0 2mm;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.block {
+  display: flow-root;
+  margin-bottom: 3.5mm;
+  break-inside: avoid;
+}
+
+/* Header Lembar Siswa */
+.doc-header {
+  border-bottom: 1.5pt solid #0f172a;
+  padding-bottom: 2.5mm;
+  margin-bottom: 3mm;
+}
+.header-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5mm;
+}
+.header-brand {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.8pt;
+  color: #0f172a;
+}
+.header-kind {
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.5pt;
+  color: #0f172a;
+  border: 0.8pt solid #0f172a;
+  padding: 0.5mm 2.5mm;
+  border-radius: 1mm;
+}
+
+/* Identitas Siswa */
+.identity {
+  display: flex;
+  gap: 5mm;
+  padding: 2.5mm 3.5mm;
+  margin-bottom: 3.5mm;
+  border: 0.9pt solid #0f172a;
+  border-radius: 1.5mm;
+  background: #ffffff;
+}
+.identity span:first-child {
+  flex: 2;
+}
+.identity span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 9.5pt;
+  line-height: 1.4;
+}
+.dot-lead {
+  border-bottom: 0.8pt dotted #475569;
+  display: inline-block;
+  min-width: 25mm;
+}
+
+/* Kotak Petunjuk */
+.instruction-strip {
+  font-size: 9pt;
+  line-height: 1.45;
+  padding: 2mm 3mm;
+  margin-bottom: 3.5mm;
+  border-left: 2.5pt solid #0f172a;
+  background: #f8fafc;
+}
+
+/* Kartu Bacaan */
+.card {
+  border: 1pt solid #0f172a;
+  border-radius: 2mm;
+  padding: 3.5mm 4.5mm;
+  margin-bottom: 3.5mm;
+}
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.6pt solid #cbd5e1;
+  padding-bottom: 1.5mm;
+  margin-bottom: 2.5mm;
+}
+.card-label {
+  font-size: 9.5pt;
+  font-weight: 700;
+  letter-spacing: 0.4pt;
+}
+.card-check-target {
+  font-size: 9pt;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+}
+.check-square {
+  display: inline-block;
+  width: 4.2mm;
+  height: 4.2mm;
+  border: 1.2pt solid #0f172a;
+  border-radius: 0.8mm;
+  vertical-align: middle;
+}
+.card-text {
+  font-size: 13pt;
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0.25pt;
+  word-spacing: 0.75pt;
+  margin: 0;
+  color: #000000;
+}
+.card-meta-note {
+  font-size: 8.5pt;
+  color: #475569;
+  margin-top: 2mm;
+  padding-top: 1.5mm;
+  border-top: 0.5pt dashed #cbd5e1;
+}
+
+/* Soal Latihan Isian */
+.question {
+  border: 1pt solid #0f172a;
+  border-radius: 2mm;
+  padding: 3.5mm 4.5mm;
+  margin-bottom: 3.5mm;
+}
+.exercise-section-title {
+  border-bottom: 1pt solid #0f172a;
+  padding-bottom: 1.5mm;
+  margin-bottom: 2.5mm;
+}
+.exercise-section-title h2 {
+  font-size: 13pt;
+  margin: 0 0 1mm;
+}
+.question-title {
+  font-size: 10pt;
+  font-weight: 700;
+  margin-bottom: 1.5mm;
+}
+.question-text {
+  font-size: 11pt;
+  line-height: 1.6;
+  margin: 0 0 2mm;
+}
+.answer-box-line {
+  display: flex;
+  align-items: flex-end;
+  gap: 3mm;
+  margin-top: 2.5mm;
+}
+.answer-tag {
+  font-size: 9.5pt;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.answer-line {
+  flex: 1;
+  height: 7mm;
+  border-bottom: 1pt solid #0f172a;
+  margin-bottom: 0.5mm;
+}
+
+/* Halaman Khusus Guru */
+.teacher-header {
+  border-bottom: 1.5pt solid #0f172a;
+  padding-bottom: 3mm;
+  margin-bottom: 4mm;
+}
+.teacher-warning-box {
+  border: 1pt solid #0f172a;
+  padding: 2.5mm 3.5mm;
+  margin: 2.5mm 0 3mm;
+  border-radius: 1.5mm;
+  font-size: 9pt;
+  line-height: 1.45;
+  background: #f8fafc;
+}
+.teacher-notes-callout {
+  padding: 2.5mm 3.5mm;
+  border-left: 2.5pt solid #0f172a;
+  margin: 2mm 0 3mm;
+  font-size: 9.5pt;
+  line-height: 1.5;
+  background: #f1f5f9;
+}
+.key {
+  border: 0.8pt solid #0f172a;
+  border-radius: 1.5mm;
+  padding: 3mm 4mm;
+  margin-bottom: 2.5mm;
+}
+.key h3 {
+  font-size: 10.5pt;
+  margin: 0 0 1mm;
+  color: #000000;
+}
+.change {
+  border: 0.8pt solid #0f172a;
+  border-radius: 1.5mm;
+  padding: 3mm 4mm;
+  margin-bottom: 2.5mm;
+}
+.warning {
+  margin-bottom: 1.5mm;
+}
+.small {
+  font-size: 8.8pt;
+  line-height: 1.45;
+  color: #334155;
+}
+
+#student, #teacher {
+  width: 178mm;
+}
+</style>
+</head>
+<body>
+
+<div id="student">
+  <header class="block doc-header">
+    <div class="header-meta">
+      <span class="header-brand">READEASE · AKSARAINKLUSI</span>
+      <span class="header-kind">LEMBAR SISWA</span>
+    </div>
+    <h1>{{ data.document.title }}</h1>
+    <div class="identity">
+      <span>Nama: {% if data.student_name %}<strong>{{ data.student_name }}</strong>{% else %}<span style="color:#64748b;">....................................................................</span>{% endif %}</span>
+      <span>Kelas: {% if data.student_class %}<strong>{{ data.student_class }}</strong>{% else %}<span style="color:#64748b;">......................................</span>{% endif %}</span>
+    </div>
+
+    <div class="instruction-strip">
+      <strong>Petunjuk Belajar:</strong> Bacalah setiap kartu secara bertahap dan tenang. Beri tanda centang (<span class="check-square" style="width:3mm;height:3mm;margin:0 1mm;"></span>) pada kotak setelah kartu selesai kamu baca.
+    </div>
+  </header>
+
+  {% for card in data.cards %}
+  <section class="block card" data-card="{{ card.id }}">
+    <div class="card-header-row">
+      <span class="card-label">Kartu {{ loop.index }}</span>
+      <span class="card-check-target"><span class="check-square"></span> Selesai</span>
+    </div>
+    <p class="card-text">{{ card.adapted_text }}</p>
+    {% if card.flagged_terms %}
+    <p class="card-meta-note">Istilah untuk dibahas: {{ card.flagged_terms | join(', ') }}</p>
+    {% endif %}
+    {% if card.warnings %}
+    <p class="card-meta-note">Kalimat ini perlu ditinjau guru.</p>
+    {% endif %}
+  </section>
+  {% endfor %}
+
+  {% for exercise in data.exercises %}
+  <section class="block question" data-exercise="{{ exercise.id }}">
+    {% if loop.first %}
+    <div class="exercise-section-title">
+      <h2>Latihan Isian Singkat</h2>
+      <p class="small">Lengkapilah bagian kosong berdasarkan cerita bacaan di atas. Tulis jawabanmu pada garis yang tersedia:</p>
+    </div>
+    {% endif %}
+    <div class="question-title">Soal {{ loop.index }}</div>
+    <p class="question-text">{{ exercise.blank_text }}</p>
+    <div class="answer-box-line">
+      <span class="answer-tag">Jawaban :</span>
+      <div class="answer-line"></div>
+    </div>
+  </section>
+  {% endfor %}
+</div>
+
+<div id="teacher">
+  <header class="block teacher-header">
+    <div class="header-meta">
+      <span class="header-brand">READEASE · AKSARAINKLUSI</span>
+      <span class="header-kind">KHUSUS GURU</span>
+    </div>
+    <h1>Kunci jawaban & Catatan Khusus</h1>
+    <p style="font-size:11pt;margin:0 0 1.5mm;">Judul Bacaan: <strong>{{ data.document.title }}</strong></p>
+    {% if data.student_name %}
+    <p class="small" style="margin:0 0 2mm;"><strong>Target Murid:</strong> {{ data.student_name }}{% if data.student_class %} (Kelas {{ data.student_class }}){% endif %}</p>
+    {% endif %}
+
+    <div class="teacher-warning-box">
+      <strong>✂️ PENTING:</strong> Pisahkan halaman guru sebelum lembar siswa dibagikan atau difotokopi. Disusun dari materi sumber dan ditinjau guru; periksa kembali sebelum digunakan.
+    </div>
+
+    {% if data.teacher_notes %}
+    <div class="teacher-notes-callout">
+      <strong>Catatan Khusus / Strategi Pedagogis:</strong><br>
+      {{ data.teacher_notes }}
+    </div>
+    {% endif %}
+  </header>
+
+  {% if data.exercises %}
+  <section class="block">
+    <h2>Kunci Jawaban Soal Isian:</h2>
+  </section>
+  {% for exercise in data.exercises %}
+  <section class="block key">
+    <h3>Kunci {{ loop.index }}: <u>{{ exercise.answer }}</u></h3>
+    <p class="small">Sumber Kalimat ({{ exercise.source_sentence_id }}): "{{ sources[exercise.source_sentence_id] }}"</p>
+  </section>
+  {% endfor %}
+  {% endif %}
+
+  <section class="block">
+    <h2>Perubahan yang disetujui guru</h2>
+    {% if not changes %}
+    <p class="small">Semua kalimat menggunakan struktur asli dari teks sumber (tidak ada perubahan bahasa otomatis).</p>
+    {% endif %}
+  </section>
+  {% for card in changes %}
+  <section class="block change">
+    <p class="small"><strong>Kalimat:</strong> {{ card.source_sentence_ids | join(', ') }} · <strong>Aturan:</strong> {{ card.rule_id or 'penyesuaian guru' }} · <strong>Status:</strong> {{ card.review_status.value if card.review_status.value is defined else card.review_status }}</p>
+    <p style="margin:1mm 0 0;font-size:10.5pt;">{{ card.adapted_text }}</p>
+  </section>
+  {% endfor %}
+
+  {% for card in data.cards if card.warnings %}
+  <section class="block warning">
+    <p class="small"><strong>Peringatan Kartu {{ card.id }}:</strong> {{ card.warnings | join('; ') }}</p>
+  </section>
+  {% endfor %}
+</div>
+
+</body>
+</html>

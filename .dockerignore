@@ -1,0 +1,12 @@
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+frontend/dist
+backend/static
+artifacts
+.git
+
+backend/data/
+**/*.sqlite3
+**/*.sqlite3-*

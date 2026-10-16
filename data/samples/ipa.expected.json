@@ -1,0 +1,33 @@
+{
+  "title": "Kebun Percobaan Sekolah",
+  "license": "CC0-1.0",
+  "origin": "Teks contoh asli untuk proyek AksaraInklusi; bukan kutipan buku.",
+  "word_count": 325,
+  "stage_0": {
+    "is_example": true,
+    "card_text_equals_input": true,
+    "proposals": []
+  },
+  "future_nlp_cases": [
+    {
+      "category": "syarat",
+      "must_preserve": "Jika",
+      "expectation": "Pertahankan sumber; jangan memecah singkatan atau angka desimal."
+    },
+    {
+      "category": "negasi",
+      "must_preserve": "tidak",
+      "expectation": "Pertahankan sumber; jangan memecah singkatan atau angka desimal."
+    },
+    {
+      "category": "angka",
+      "must_preserve": "12,5",
+      "expectation": "Pertahankan sumber; jangan memecah singkatan atau angka desimal."
+    },
+    {
+      "category": "singkatan",
+      "must_preserve": "Dr.",
+      "expectation": "Pertahankan sumber; jangan memecah singkatan atau angka desimal."
+    }
+  ]
+}
